@@ -1,0 +1,209 @@
+{
+  "explore": {
+    "src": "videos/explore.mp4",
+    "duration": 8.97,
+    "crop": [
+      472,
+      1018,
+      724,
+      28
+    ],
+    "sourceName": "탐색_스크롤.mp4",
+    "width": 472,
+    "height": 1018,
+    "notch": [
+      132,
+      207,
+      42
+    ],
+    "hardware": {
+      "src": "images/hardware-explore.png",
+      "box": [
+        325,
+        65,
+        186,
+        54
+      ]
+    }
+  },
+  "compass": {
+    "src": "videos/compass.mp4",
+    "duration": 16.2,
+    "crop": [
+      464,
+      1008,
+      726,
+      36
+    ],
+    "sourceName": "마음나침반_카드.mp4",
+    "width": 464,
+    "height": 1008,
+    "notch": [
+      130,
+      204,
+      41
+    ]
+  },
+  "firefly": {
+    "src": "videos/firefly.mp4",
+    "duration": 11.17,
+    "crop": [
+      470,
+      1020,
+      722,
+      28
+    ],
+    "sourceName": "반딧불주머니 (2).mp4",
+    "width": 470,
+    "height": 1020,
+    "notch": [
+      133,
+      204,
+      41
+    ],
+    "hardware": {
+      "src": "images/hardware-firefly.png",
+      "box": [
+        325,
+        65,
+        186,
+        54
+      ]
+    }
+  },
+  "map": {
+    "src": "videos/map.mp4",
+    "duration": 27.63,
+    "crop": [
+      568,
+      1228,
+      46,
+      34
+    ],
+    "sourceName": "지도만들기.mp4",
+    "width": 568,
+    "height": 1228,
+    "notch": [
+      162,
+      245,
+      49
+    ],
+    "hardware": {
+      "src": "images/hardware-map.png",
+      "box": [
+        325,
+        65,
+        186,
+        54
+      ]
+    }
+  },
+  "home": {
+    "src": "videos/home.mp4",
+    "duration": 5.87,
+    "crop": [
+      466,
+      1008,
+      726,
+      40
+    ],
+    "sourceName": "홈_스크롤.mp4",
+    "width": 466,
+    "height": 1008,
+    "notch": [
+      132,
+      202,
+      41
+    ],
+    "hardware": {
+      "src": "images/hardware-home.png",
+      "box": [
+        325,
+        65,
+        186,
+        54
+      ]
+    }
+  },
+  "mission": {
+    "src": "videos/mission.mp4",
+    "duration": 16.8,
+    "crop": [
+      568,
+      1230,
+      58,
+      40
+    ],
+    "sourceName": "미션실천기록하기.mp4",
+    "width": 568,
+    "height": 1230,
+    "notch": [
+      159,
+      249,
+      50
+    ],
+    "hardware": {
+      "src": "images/hardware-mission.png",
+      "box": [
+        325,
+        65,
+        186,
+        54
+      ]
+    }
+  },
+  "mypage": {
+    "src": "videos/mypage.mp4",
+    "duration": 7.53,
+    "crop": [
+      470,
+      1018,
+      728,
+      30
+    ],
+    "sourceName": "마이페이지_스크롤.mp4",
+    "width": 470,
+    "height": 1018,
+    "notch": [
+      132,
+      208,
+      42
+    ],
+    "hardware": {
+      "src": "images/hardware-mypage.png",
+      "box": [
+        325,
+        65,
+        186,
+        54
+      ]
+    }
+  },
+  "basecamp": {
+    "src": "videos/basecamp.mp4",
+    "duration": 9.28,
+    "crop": [
+      570,
+      1230,
+      66,
+      52
+    ],
+    "sourceName": "마이페이지_내베이스캠프확인.mp4",
+    "width": 570,
+    "height": 1230,
+    "notch": [
+      160,
+      249,
+      50
+    ],
+    "hardware": {
+      "src": "images/hardware-basecamp.png",
+      "box": [
+        325,
+        65,
+        186,
+        54
+      ]
+    }
+  }
+}
