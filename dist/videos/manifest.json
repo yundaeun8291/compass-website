@@ -46,14 +46,14 @@
   },
   "firefly": {
     "src": "videos/firefly.mp4",
-    "duration": 11.17,
+    "duration": 9.73,
     "crop": [
       470,
       1020,
       722,
       28
     ],
-    "sourceName": "반딧불주머니 (2).mp4",
+    "sourceName": "반딧불 주머니.mp4",
     "width": 470,
     "height": 1020,
     "notch": [
@@ -204,6 +204,7 @@
         186,
         54
       ]
-    }
+    },
+    "poster": "images/basecamp-poster.jpg"
   }
 }

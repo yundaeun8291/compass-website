@@ -1,4 +1,6 @@
-import {setupFeatureVideos} from './feature-videos.js?v=4';
+import {setupFeatureVideos} from './feature-videos.js?v=5';
+import {setupPlanningPlayer} from './planning-player.js?v=5';
+import {setupRevisionMotion} from './revision-motion.js?v=5';
 const NS='http://www.w3.org/2000/svg';
 let assetSerial=0;
 const art=document.querySelector('#art');
@@ -21,7 +23,7 @@ function resize(){scale=Math.max(1024,document.documentElement.clientWidth)/1920
 // Fixed navigation uses the original outlined lettering and original coordinates.
 const nav=document.querySelector('#gnb'),navSvg=make('svg',{viewBox:'677.387 28.387 564.226 53.4041',fill:'none','aria-hidden':'true'});
 for(const i of range(742,748))navSvg.append(node(i));nav.append(navSvg);
-const starts=[2212,11180,16022,21870],labels=['Planning','Branding','Design','Features'];
+const starts=[2212,11180,15882,21730],labels=['Planning','Branding','Design','Features'];
 let current=-2;
 const navCenters=range(745,748).map(i=>{const b=navSvg.querySelector(`[data-i="${i}"]`).getBBox();return b.x+b.width/2});
 labels.forEach((label,i)=>{const b=document.createElement('button');b.ariaLabel=label;b.style.left=`${(navCenters[i]-125.384/2-677.387)/564.226*100}%`;b.onclick=()=>window.scrollTo({top:starts[i]*scale,behavior:'smooth'});nav.append(b)});
@@ -50,6 +52,9 @@ action(envy,'부러워 버튼 펼치기',async()=>{if(!envyAvailable||envyBusy||
 function resetExplore(){++envyGeneration;envyDone=false;envyBusy=false;envyAvailable=false;envyEntry?.cancel();envyFloat?.cancel();description.getAnimations().forEach(a=>a.cancel());envy.style.opacity='0';envy.style.pointerEvents='none';envy.setAttribute('tabindex','-1');envy.setAttribute('aria-hidden','true');envy.setAttribute('aria-expanded','false');clickText.style.opacity='0';arrow.style.opacity='0';icons.style.opacity='0';description.style.opacity='0';arrowRect.setAttribute('width',0);iconRect.setAttribute('width',0);node(281).style.opacity='0'}
 function revealExplore(){envyAvailable=true;node(281).style.opacity='1';envy.style.opacity='1';envy.style.pointerEvents='';envy.setAttribute('tabindex','0');envy.setAttribute('aria-hidden','false');clickText.style.opacity='1';envyEntry=animate(envy,[{opacity:0,transform:'translate(368px,27031px) scale(.55) translate(-368px,-27031px)'},{opacity:1,transform:'translate(368px,27031px) scale(1) translate(-368px,-27031px)'}],{duration:650,easing:'cubic-bezier(.16,1,.3,1)'});envyFloat=animate(envy,[{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}],{duration:2100,delay:650,iterations:Infinity,easing:'ease-in-out'})}
 resetExplore();
+// Align the final recorded envy icon with the existing white control.
+const exploreOffset={x:9.3,y:74.4};node(278).setAttribute('transform',`translate(${exploreOffset.x},${exploreOffset.y})`);node(278).setAttribute('data-video-offset',`translate(${exploreOffset.x},${exploreOffset.y})`);node(278).setAttribute('data-offset-y',exploreOffset.y);node(281).setAttribute('transform',`translate(${exploreOffset.x},${exploreOffset.y})`);
+const descriptionPosition=make('g');description.before(descriptionPosition);descriptionPosition.append(description);descriptionPosition.setAttribute('transform',`translate(0,${exploreOffset.y})`);
 // The independent Week 3 control belongs in the dark report section.
 const week=make('g',{class:'week-trigger','data-part':'week3'}),weekScale=make('g',{class:'week-preview'});
 const weekBox={x:node(648).getBBox().x-20,y:35487,w:355,h:355},weekArtwork=await importSvg('week3');
@@ -59,9 +64,9 @@ const weekImage=weekArtwork.querySelector('image'),weekImageUrl=weekImage.getAtt
 const mockups=[];
 for(const [i,phoneId,captionId]of [[1,651,592],[2,652,596],[3,650,599]]){const original=node(phoneId),box=original.getBBox(),asset=await importSvg('목업'+i);original.before(asset);const phone=Array.from(asset.children).find(e=>e.tagName==='g'),local=phone.getBBox();asset.setAttribute('x',box.x-local.x);asset.setAttribute('y',box.y-local.y);asset.classList.add('mockup-reveal','week-hidden');asset.setAttribute('data-mockup',i);asset.setAttribute('aria-label','마음 탐험 일지 목업 '+i);asset.setAttribute('aria-hidden','true');original.remove();node(captionId).remove();mockups.push(asset)}
 let weekOpen=false,weekGeneration=0;
-action(week,'Week 3 마음 탐험 일지 열기',()=>{weekOpen=!weekOpen;week.setAttribute('aria-expanded',String(weekOpen));const generation=++weekGeneration;mockups.forEach((g,i)=>{g.getAnimations().forEach(a=>a.cancel());g.classList.toggle('week-hidden',!weekOpen);g.setAttribute('aria-hidden',String(!weekOpen));if(weekOpen){g.style.opacity='1';animate(g,[{opacity:0,transform:'translateX(-42px)'},{opacity:1,transform:'translateX(0)'}],{duration:430,delay:reduced?0:i*105,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}).finished.then(()=>{if(generation===weekGeneration)g.style.opacity='1'}).catch(()=>{})}else g.style.opacity='0'})});hit(week,weekBox.x,weekBox.y,weekBox.w,weekBox.h);week.setAttribute('aria-expanded','false');
+action(week,'Week 3 마음 탐험 일지 열기',()=>{weekOpen=!weekOpen;if(weekOpen&&scrollY/scale>35138&&scrollY/scale<36300)window.scrollTo({top:35138*scale,behavior:reduced?'instant':'smooth'});week.setAttribute('aria-expanded',String(weekOpen));const generation=++weekGeneration;mockups.forEach((g,i)=>{g.getAnimations().forEach(a=>a.cancel());g.classList.toggle('week-hidden',!weekOpen);g.setAttribute('aria-hidden',String(!weekOpen));if(weekOpen){g.style.opacity='1';animate(g,[{opacity:0,transform:'translateX(-42px)'},{opacity:1,transform:'translateX(0)'}],{duration:430,delay:reduced?0:i*105,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}).finished.then(()=>{if(generation===weekGeneration)g.style.opacity='1'}).catch(()=>{})}else g.style.opacity='0'})});hit(week,weekBox.x,weekBox.y,weekBox.w,weekBox.h);week.setAttribute('aria-expanded','false');
 // Record hover images are in the same original slots; no base geometry changes.
-async function importSvg(name){let s=await fetch('assets/'+name+'.svg?v=3').then(r=>{if(!r.ok)throw Error('SVG unavailable: '+name);return r.text()});s=s.replaceAll('../images/','images/');const doc=new DOMParser().parseFromString(s,'image/svg+xml'),root=doc.documentElement,prefix='asset-'+(++assetSerial)+'-';const ids=Array.from(root.querySelectorAll('[id]')).map(e=>e.id);for(const id of ids)s=s.replaceAll(id,prefix+id);return new DOMParser().parseFromString(s,'image/svg+xml').documentElement}
+async function importSvg(name){let s=await fetch('assets/'+name+'.svg?v=5').then(r=>{if(!r.ok)throw Error('SVG unavailable: '+name);return r.text()});s=s.replaceAll('../images/','images/');const doc=new DOMParser().parseFromString(s,'image/svg+xml'),root=doc.documentElement,prefix='asset-'+(++assetSerial)+'-';const ids=Array.from(root.querySelectorAll('[id]')).map(e=>e.id);for(const id of ids)s=s.replaceAll(id,prefix+id);return new DOMParser().parseFromString(s,'image/svg+xml').documentElement}
 // The supplied Design blocks preserve their original anchor and native size.
 for(const [name,ids,anchor]of [
  ['디자인 글씨',[309,310],309],
@@ -86,6 +91,8 @@ const footerStates=[];
 for(const [name,indices,label]of [['푸터1',[29,30],'Credits & Resources'],['푸터2',[22,23],'Back to Team']]){const asset=await importSvg(name);asset.setAttribute('x',0);asset.setAttribute('y',40301);asset.setAttribute('data-footer',footerStates.length===0?'team':'credits');scene.append(asset);const items=Array.from(asset.children),link=make('g',{class:'footer-link'});items[indices[0]].before(link);indices.forEach(i=>link.append(items[i]));const box=link.getBBox(),visual=make('g',{class:'footer-link-visual'});while(link.firstChild)visual.append(link.firstChild);link.append(visual);hit(link,box.x-5,box.y-5,box.width+10,box.height+10);action(link,label,()=>{const showCredits=label==='Credits & Resources';footerStates.forEach((state,i)=>{const visible=i===(showCredits?1:0);state.style.display=visible?'':'none';state.setAttribute('aria-hidden',String(!visible))});});footerStates.push(asset)}
 footerStates[1].style.display='none';footerStates[1].setAttribute('aria-hidden','true');footerStates[0].setAttribute('aria-hidden','false');
 svg.setAttribute('viewBox','0 0 1920 41039');svg.setAttribute('height',41039);node(0).setAttribute('height',41039);svg.querySelector('#clip0_588_11739 rect').setAttribute('height',41039);
+setupPlanningPlayer({node,make,watch,watchers});
+await setupRevisionMotion({svg,scene,node,make,group,range,importSvg,animate,watch,watchers,reduced});
 await setupFeatureVideos({svg,node,make,watch,watchers,myPage,onExploreStart:resetExplore,onExploreEnd:revealExplore,onExploreLeave:resetExplore});
 // Fixed TOP control uses the original circle and lettering on every section.
 const topButton=document.createElement('button'),topSvg=make('svg',{viewBox:'1805 978 65 65',fill:'none','aria-hidden':'true'});topButton.id='top-button';topButton.type='button';topButton.setAttribute('aria-label','맨 위로');[815,816,817].forEach(i=>topSvg.append(node(i)));topButton.append(topSvg);document.body.append(topButton);topButton.addEventListener('click',()=>window.scrollTo({left:0,top:0,behavior:'smooth'}));
@@ -93,5 +100,10 @@ const topButton=document.createElement('button'),topSvg=make('svg',{viewBox:'180
 let lastMove=0;
 window.addEventListener('pointermove',e=>{const y=(scrollY+e.clientY)/scale;if(y<11180||y>=22208)return;const now=performance.now();if(now-lastMove<22)return;lastMove=now;const dot=document.createElement('i');dot.className='trail';dot.style.left=e.clientX+'px';dot.style.top=e.clientY+'px';dot.style.transform='translate(-50%,-50%)';effects.append(dot);dot.addEventListener('animationend',()=>dot.remove(),{once:true})},{passive:true});
 document.addEventListener('click',e=>{if(e.target.closest('#gnb'))return;const y=(scrollY+(e.clientY||0))/scale;if(y<11180||y>=40301||e.detail===0)return;for(let i=0;i<2;i++){const wave=document.createElement('i');wave.className='wave';wave.style.left=e.clientX+'px';wave.style.top=e.clientY+'px';wave.style.animationDelay=i*65+'ms';effects.append(wave);wave.addEventListener('animationend',()=>wave.remove(),{once:true})}});
+// One gentle alignment per entry, after user scrolling has settled. Any new
+// wheel, touch or key input cancels it; there is no mandatory scroll snapping.
+let alignTimer,weekAligned=false,lastScrollY=scrollY,aligning=false;
+function settleWeek(){clearTimeout(alignTimer);const y=scrollY/scale;if(y<34850||y>36550)weekAligned=false;if(weekAligned||aligning||y<35040||y>35580)return;alignTimer=setTimeout(()=>{const now=scrollY/scale;if(now<35040||now>35580||weekAligned)return;weekAligned=true;aligning=true;window.scrollTo({top:35138*scale,behavior:reduced?'instant':'smooth'});setTimeout(()=>aligning=false,650)},360)}
+window.addEventListener('scroll',settleWeek,{passive:true});['wheel','touchstart','keydown'].forEach(type=>window.addEventListener(type,()=>{clearTimeout(alignTimer);if(aligning){aligning=false;window.scrollTo({top:scrollY,behavior:'instant'})}},{passive:true}));
 let scheduled=false;function update(){updateNav();watchers.forEach(fn=>fn());scheduled=false}window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(update)}},{passive:true});window.addEventListener('resize',resize);resize();
 document.documentElement.dataset.ready='true';
