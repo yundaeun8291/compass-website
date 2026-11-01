@@ -5,7 +5,7 @@ export async function setupRevisionMotion({svg,scene,node,make,group,range,impor
  }
  async function replace(name,ids,anchor=ids[0],localIndex=0){
   const old=node(anchor),box=old.getBBox(),asset=await importSvg(name),motion=make('g',{'data-planning':name});
-  old.before(motion);motion.append(asset);const local=asset.children[localIndex].getBBox();asset.setAttribute('x',box.x-local.x);asset.setAttribute('y',box.y-local.y);asset.style.overflow='visible';ids.forEach(i=>node(i)?.remove());return {asset,motion,box:motion.getBBox()};
+  old.before(motion);motion.append(asset);const local=asset.children[localIndex].getBBox();asset.setAttribute('x',box.x-local.x);asset.setAttribute('y',(name==='페르소나3'?node(20).getBBox().y:box.y)-local.y);asset.style.overflow='visible';ids.forEach(i=>node(i)?.remove());return {asset,motion,box:motion.getBBox()};
  }
  // The hero's original translucent symbols remain at their original positions.
  const hero=[group([5,6]),node(70),node(72)];hero.forEach((e,i)=>{if(!reduced)animate(e,[{transform:'translateY(0)'},{transform:'translateY(-12px)'},{transform:'translateY(0)'}],{duration:6600+i*750,delay:-i*1700,iterations:Infinity,easing:'ease-in-out'})});
