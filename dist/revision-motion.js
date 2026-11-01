@@ -32,7 +32,7 @@ export async function setupRevisionMotion({svg,scene,node,make,group,range,impor
   watchers.push(watch(r.box.y+180,r.box.height-180,()=>{const current=++generation;r.motion.dataset.state='filling';motions.forEach(m=>m.run());labels.forEach((e,i)=>{animations.push(animate(e,[{opacity:0},{opacity:1}],{duration:350,delay:650+(i%4)*100,fill:'both'}))});setTimeout(()=>{if(current===generation)r.motion.dataset.state='complete'},1250)},()=>{++generation;motions.forEach(m=>m.reset());animations.forEach(a=>a.cancel());animations=[];labels.forEach(e=>e.style.opacity='0');r.motion.dataset.state='waiting'}));motions.forEach(m=>m.reset());labels.forEach(e=>e.style.opacity='0');
  }
  for(const [name,ids,anchor,localIndex]of [
-  ['페르소나1',[48,49,...range(202,209)],48,0],['페르소나2',[18,185,...range(194,201)],18,0],['페르소나3',[20,...range(186,193)],20,0]
+  ['페르소나1',[48,49,...range(202,209)],48,0],['페르소나2',[18,185,...range(194,201)],18,0],['페르소나3',[20,...range(186,193)],186,0]
  ]){const r=await replace(name,ids,anchor,localIndex);const hover=make('g',{class:'persona-hover'});r.asset.before(hover);hover.append(r.asset);r.motion.classList.add('persona-card');r.motion.setAttribute('tabindex','0');r.motion.setAttribute('role','img');r.motion.setAttribute('aria-label',name);enterMotion(r.motion,r.box.y,r.box.height,{delay:0})}
  // A separate reveal wrapper leaves hover scale and restrained sway independent.
  const solutions=[[731],[733,735],[732,734]].map((ids,i)=>{const g=group(ids,{'data-solution':i+1}),hover=make('g',{class:'solution-hover'});while(g.firstChild)hover.append(g.firstChild);g.append(hover);g.classList.add('solution-card');g.setAttribute('tabindex','0');const b=g.getBBox();g.style.opacity='0';return {g,b}});
