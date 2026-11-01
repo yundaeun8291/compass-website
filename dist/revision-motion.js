@@ -9,9 +9,15 @@ export async function setupRevisionMotion({svg,scene,node,make,group,range,impor
   old.before(motion);motion.append(asset);const local=asset.children[localIndex].getBBox();asset.setAttribute('x',box.x-local.x);asset.setAttribute('y',(name==='페르소나3'?node(20).getBBox().y:box.y)-local.y);asset.style.overflow='visible';ids.forEach(i=>node(i)?.remove());return {asset,motion,box:motion.getBBox()};
  }
  // The hero's original translucent symbols remain at their original positions.
- const hero=[group([5,6]),node(70),node(72)];hero.forEach((e,i)=>{if(!reduced)animate(e,[{transform:'translateY(0)'},{transform:'translateY(-12px)'},{transform:'translateY(0)'}],{duration:6600+i*750,delay:-i*1700,iterations:Infinity,easing:'ease-in-out'})});
+ const heroAsset=await importSvg('웹 첫번째 목업');heroAsset.setAttribute('data-part','hero');node(3).before(heroAsset);
+ [3,4,5,6,12,...range(21,33),44,69,70,71,72].forEach(i=>node(i)?.remove());
+ const heroChildren=Array.from(heroAsset.children),heroSymbols=[[heroChildren[2],heroChildren[3]],[heroChildren[19]],[heroChildren[21]]];
+ heroSymbols.forEach((elements,i)=>{const g=make('g');elements[0].before(g);elements.forEach(e=>g.append(e));if(!reduced)animate(g,[{transform:'translateY(0)'},{transform:'translateY(-12px)'},{transform:'translateY(0)'}],{duration:6600+i*750,delay:-i*1700,iterations:Infinity,easing:'ease-in-out'})});
+ // The supplied two phone masks share one source image but remain independent.
+ [heroChildren[22],heroChildren[23]].forEach((e,i)=>{e.setAttribute('data-hero-phone',i+1);if(!reduced)animate(e,[{transform:'translateY(0)'},{transform:`translateY(${i?18:-18}px)`},{transform:'translateY(0)'}],{duration:2100,delay:i?-340:0,iterations:Infinity,easing:'ease-in-out'})});
  // Overview retains its image and shade; only the outlined type rises.
- const overview=node(17),overviewPaths=Array.from(overview.querySelectorAll('path')).filter(e=>!e.closest('defs'));
+ const overview=node(17),overviewLabels=Array.from(overview.children).filter(e=>e.tagName==='path'&&e.getAttribute('fill')==='#43D19D'),overviewLabel=await importSvg('Overview'),overviewAnchor=overviewLabels[0].getBBox();overviewLabel.setAttribute('x',overviewAnchor.x);overviewLabel.setAttribute('y',overviewAnchor.y);overviewLabels[0].before(overviewLabel);overviewLabels.forEach(e=>e.remove());
+ const overviewPaths=[overviewLabel,...Array.from(overview.children).filter(e=>e.tagName==='path')];
  if(overviewPaths.length){const texts=make('g',{'data-planning':'오버뷰'});overviewPaths[0].before(texts);overviewPaths.forEach(e=>texts.append(e));const b=texts.getBBox();enterMotion(texts,b.y,b.height)}
  for(const [name,ids]of [['survey',range(56,62)],['인사이트',[13,15]],['질문1',range(74,76)],['질문2',range(77,79)],['질문3',range(80,82)],['페르소나 글씨',[19]],['솔루션 글씨',[14,16]]]){const r=await replace(name,ids);enterMotion(r.motion,r.box.y,r.box.height)}
  // Clip the original colored chart geometry, never redraw the charts.
@@ -27,6 +33,7 @@ export async function setupRevisionMotion({svg,scene,node,make,group,range,impor
   // The third panel's background is at 151/152 and precedes its question type.
   const all=name==='질문3-3'?[152,153,...ids]:ids,anchor=name==='질문3-3'?152:ids[0];
   const r=await replace(name,[...new Set(all)],anchor),elements=Array.from(r.asset.children),motions=[];
+  if(name==='질문2-2'){const old=elements[21],b=old.getBBox(),label=await importSvg('내 상황에서는 현실적으로 어려워서');label.setAttribute('x',b.x);label.setAttribute('y',b.y);old.replaceWith(label);elements[21]=label;}
   if(config.pie){const g=chartGroup(r.asset,config.pie),b=g.getBBox();motions.push(pieReveal(g,b.x+b.width/2,b.y+b.height/2,Math.max(b.width,b.height)))}
   if(config.bubbles)config.bubbles.forEach((indices,i)=>{const g=make('g');elements[indices[0]].before(g);indices.forEach(j=>g.append(elements[j]));motions.push(bubbleReveal(g,i*210))});
   config.bars.forEach((indices,i)=>{const g=make('g');elements[indices[0]].before(g);indices.forEach(j=>g.append(elements[j]));motions.push(rectReveal(g,name==='질문2-2'?i*160:i*120,name==='질문2-2'?420:800,name==='질문2-2'?'x':'y'))});
@@ -37,8 +44,9 @@ export async function setupRevisionMotion({svg,scene,node,make,group,range,impor
   ['페르소나1',[48,49,...range(202,209)],48,0],['페르소나2',[18,185,...range(194,201)],18,0],['페르소나3',[20,...range(186,193)],186,0]
  ]){const r=await replace(name,ids,anchor,localIndex);const hover=make('g',{class:'persona-hover'});r.asset.before(hover);hover.append(r.asset);r.motion.classList.add('persona-card');r.motion.setAttribute('tabindex','0');r.motion.setAttribute('role','img');r.motion.setAttribute('aria-label',name);enterMotion(r.motion,r.box.y,r.box.height,{delay:0})}
  // A separate reveal wrapper leaves hover scale and restrained sway independent.
+ const oldThird=node(732),thirdBox=oldThird.getBBox(),thirdAsset=await importSvg('솔루션 3번째 카드'),thirdLocal=thirdAsset.firstElementChild.getBBox(),thirdContainer=make('g',{'data-i':732});thirdAsset.setAttribute('x',thirdBox.x-thirdLocal.x);thirdAsset.setAttribute('y',thirdBox.y-thirdLocal.y);thirdAsset.style.overflow='visible';thirdContainer.append(thirdAsset);oldThird.replaceWith(thirdContainer);node(734).remove();
  const leftTape=Array.from(node(733).children).find(e=>e.tagName==='rect'&&e.getAttribute('fill')==='#43D19D'&&+e.getAttribute('x')<500);node(731).after(leftTape);
- const solutions=[[731],[733,735],[732,734]].map((ids,i)=>{const g=group(ids,{'data-solution':i+1}),hover=make('g',{class:'solution-hover'});if(i===0)g.append(leftTape);while(g.firstChild)hover.append(g.firstChild);g.append(hover);g.classList.add('solution-card');g.setAttribute('tabindex','0');const b=g.getBBox();g.style.opacity='0';return {g,b}});
+ const solutions=[[731],[733,735],[732]].map((ids,i)=>{const g=group(ids,{'data-solution':i+1}),hover=make('g',{class:'solution-hover'});if(i===0)g.append(leftTape);while(g.firstChild)hover.append(g.firstChild);g.append(hover);g.classList.add('solution-card');g.setAttribute('tabindex','0');const b=g.getBBox();g.style.opacity='0';return {g,b}});
  const dotted=group(range(64,68),{'data-part':'persona-solution-connector'}),clip=make('clipPath',{id:'solution-connector-clip',clipPathUnits:'userSpaceOnUse'}),clipRect=make('rect',{x:930,y:9760,width:60,height:0});clip.append(clipRect);defs.append(clip);dotted.setAttribute('clip-path','url(#solution-connector-clip)');let connectorAnimations=[];
  watchers.push(watch(9763,1050,()=>{connectorAnimations.forEach(a=>a.cancel());connectorAnimations=[animate(clipRect,[{height:'0px'},{height:'220px'}],{duration:550,easing:'ease-out',fill:'both'}),...solutions.map(({g},i)=>animate(g,[{opacity:0,transform:'translateY(35px)'},{opacity:1,transform:'translateY(0)'}],{duration:550,delay:550+i*90,easing:'cubic-bezier(.22,1,.36,1)',fill:'both'}))]},()=>{connectorAnimations.forEach(a=>a.cancel());clipRect.setAttribute('height',0);solutions.forEach(({g})=>g.style.opacity='0')}));
  // Two meteors travel along their own drawn direction and stop at the artwork.

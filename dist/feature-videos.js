@@ -1,5 +1,5 @@
 export async function setupFeatureVideos({svg,node,make,watch,watchers,myPage,onExploreStart,onExploreEnd,onExploreLeave}){
- const sources=await fetch('videos/manifest.json?v=6').then(r=>{if(!r.ok)throw Error('Video manifest unavailable');return r.json()});
+ const sources=await fetch('videos/manifest.json?v=7').then(r=>{if(!r.ok)throw Error('Video manifest unavailable');return r.json()});
  function rasterScreen(rect){const b=rect.getBBox();return {x:b.x+b.width*42/844,y:b.y+b.height*40/1704,w:b.width*758/844,h:b.height*1624/1704,r:b.width*82/844,outer:b}}
  function slot(key,box,anchor,globalYOffset=0){
   const frame=sources[key].frame;if(frame){const b=box.outer;box={...box,y:b.y+b.height*36/1704,h:b.height*1636/1704,r:b.width*88/844}}
