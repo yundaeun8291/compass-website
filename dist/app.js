@@ -1,6 +1,6 @@
-import {setupFeatureVideos} from './feature-videos.js?v=5';
-import {setupPlanningPlayer} from './planning-player.js?v=5';
-import {setupRevisionMotion} from './revision-motion.js?v=5';
+import {setupFeatureVideos} from './feature-videos.js?v=6';
+import {setupPlanningPlayer} from './planning-player.js?v=6';
+import {setupRevisionMotion} from './revision-motion.js?v=6';
 const NS='http://www.w3.org/2000/svg';
 let assetSerial=0;
 const art=document.querySelector('#art');
@@ -54,7 +54,7 @@ function revealExplore(){envyAvailable=true;node(281).style.opacity='1';envy.sty
 resetExplore();
 // Align the final recorded envy icon with the existing white control.
 const exploreOffset={x:9.3,y:74.4};node(278).setAttribute('transform',`translate(${exploreOffset.x},${exploreOffset.y})`);node(278).setAttribute('data-video-offset',`translate(${exploreOffset.x},${exploreOffset.y})`);node(278).setAttribute('data-offset-y',exploreOffset.y);node(281).setAttribute('transform',`translate(${exploreOffset.x},${exploreOffset.y})`);
-const descriptionPosition=make('g');description.before(descriptionPosition);descriptionPosition.append(description);descriptionPosition.setAttribute('transform',`translate(0,${exploreOffset.y})`);
+const descriptionPosition=make('g');description.before(descriptionPosition);descriptionPosition.append(description);descriptionPosition.setAttribute('transform','translate(0,-10.6)');
 // The independent Week 3 control belongs in the dark report section.
 const week=make('g',{class:'week-trigger','data-part':'week3'}),weekScale=make('g',{class:'week-preview'});
 const weekBox={x:node(648).getBBox().x-20,y:35487,w:355,h:355},weekArtwork=await importSvg('week3');
@@ -66,7 +66,7 @@ for(const [i,phoneId,captionId]of [[1,651,592],[2,652,596],[3,650,599]]){const o
 let weekOpen=false,weekGeneration=0;
 action(week,'Week 3 마음 탐험 일지 열기',()=>{weekOpen=!weekOpen;if(weekOpen&&scrollY/scale>35138&&scrollY/scale<36300)window.scrollTo({top:35138*scale,behavior:reduced?'instant':'smooth'});week.setAttribute('aria-expanded',String(weekOpen));const generation=++weekGeneration;mockups.forEach((g,i)=>{g.getAnimations().forEach(a=>a.cancel());g.classList.toggle('week-hidden',!weekOpen);g.setAttribute('aria-hidden',String(!weekOpen));if(weekOpen){g.style.opacity='1';animate(g,[{opacity:0,transform:'translateX(-42px)'},{opacity:1,transform:'translateX(0)'}],{duration:430,delay:reduced?0:i*105,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'}).finished.then(()=>{if(generation===weekGeneration)g.style.opacity='1'}).catch(()=>{})}else g.style.opacity='0'})});hit(week,weekBox.x,weekBox.y,weekBox.w,weekBox.h);week.setAttribute('aria-expanded','false');
 // Record hover images are in the same original slots; no base geometry changes.
-async function importSvg(name){let s=await fetch('assets/'+name+'.svg?v=5').then(r=>{if(!r.ok)throw Error('SVG unavailable: '+name);return r.text()});s=s.replaceAll('../images/','images/');const doc=new DOMParser().parseFromString(s,'image/svg+xml'),root=doc.documentElement,prefix='asset-'+(++assetSerial)+'-';const ids=Array.from(root.querySelectorAll('[id]')).map(e=>e.id);for(const id of ids)s=s.replaceAll(id,prefix+id);return new DOMParser().parseFromString(s,'image/svg+xml').documentElement}
+async function importSvg(name){let s=await fetch('assets/'+name+'.svg?v=6').then(r=>{if(!r.ok)throw Error('SVG unavailable: '+name);return r.text()});s=s.replaceAll('../images/','images/');const doc=new DOMParser().parseFromString(s,'image/svg+xml'),root=doc.documentElement,prefix='asset-'+(++assetSerial)+'-';const ids=Array.from(root.querySelectorAll('[id]')).map(e=>e.id);for(const id of ids)s=s.replaceAll(id,prefix+id);return new DOMParser().parseFromString(s,'image/svg+xml').documentElement}
 // The supplied Design blocks preserve their original anchor and native size.
 for(const [name,ids,anchor]of [
  ['디자인 글씨',[309,310],309],

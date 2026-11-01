@@ -45,8 +45,8 @@
     ]
   },
   "firefly": {
-    "src": "videos/firefly.mp4",
-    "duration": 9.73,
+    "src": "videos/firefly-short.mp4",
+    "duration": 6.5,
     "crop": [
       470,
       1020,
@@ -69,7 +69,9 @@
         186,
         54
       ]
-    }
+    },
+    "frame": "images/frame-firefly.png",
+    "trimEnd": 6.5
   },
   "map": {
     "src": "videos/map.mp4",
@@ -96,7 +98,9 @@
         186,
         54
       ]
-    }
+    },
+    "playbackRate": 1.25,
+    "frame": "images/frame-map.png"
   },
   "home": {
     "src": "videos/home.mp4",
@@ -150,7 +154,9 @@
         186,
         54
       ]
-    }
+    },
+    "poster": "images/mission-poster.jpg",
+    "playbackRate": 1.25
   },
   "mypage": {
     "src": "videos/mypage.mp4",
@@ -177,7 +183,8 @@
         186,
         54
       ]
-    }
+    },
+    "playbackRate": 1.25
   },
   "basecamp": {
     "src": "videos/basecamp.mp4",

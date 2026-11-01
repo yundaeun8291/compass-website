@@ -6,7 +6,7 @@ function inlineSvg(s){return s.replace(/(?:\.\.\/)?images\/[A-Za-z0-9_.-]+/g,p=>
 const art=inlineSvg(read('art.svg'));
 const assets=Object.fromEntries(fs.readdirSync(path.join(root,'assets')).filter(n=>n.endsWith('.svg')).map(n=>[n.slice(0,-4),inlineSvg(read('assets/'+n))]));
 const videos=JSON.parse(read('videos/manifest.json'));
-for(const video of Object.values(videos)){video.src='data:video/mp4;base64,'+fs.readFileSync(path.join(root,video.src)).toString('base64');if(video.hardware)video.hardware.src=data(video.hardware.src);if(video.poster)video.poster=data(video.poster)}
+for(const video of Object.values(videos)){video.src='data:video/mp4;base64,'+fs.readFileSync(path.join(root,video.src)).toString('base64');if(video.hardware)video.hardware.src=data(video.hardware.src);if(video.poster)video.poster=data(video.poster);if(video.frame)video.frame=data(video.frame)}
 const videoModule=read('feature-videos.js').replace('export async function','async function').replace(/const sources=await fetch\(.*?return r.json\(\)\}\);/,'const sources=embeddedVideos;');
 const planningModule=read('planning-player.js').replace('export function','function').replace("'videos/planning.mp4'",JSON.stringify('data:video/mp4;base64,'+fs.readFileSync(path.join(root,'videos/planning.mp4')).toString('base64')));
 const motionModule=read('revision-motion.js').replace('export async function','async function');
@@ -14,6 +14,6 @@ let app=read('app.js').replace(/import \{setupFeatureVideos\} from .*?;\n/,()=>v
 app=`const embeddedAssets=${JSON.stringify(assets)};\nconst embeddedVideos=${JSON.stringify(videos)};\n`+app;
 app=app.replace(/let s=await fetch\('assets\/'.*?;return r.text\(\)\}\);/,"let s=embeddedAssets[name];");
 const css=read('style.css').replace('fonts/Pretendard-SemiBold.woff2',data('fonts/Pretendard-SemiBold.woff2'));
-let html=read('index.html').replace('<link rel="stylesheet" href="style.css?v=5">',`<!-- Pretendard font license\n${read('fonts/LICENSE.txt')}\n--><style>${css}</style>`).replace('<script type="module" src="app.js?v=5"></script>',`<script type="module">${app.replaceAll('</script','<\\/script')}</script>`);
+let html=read('index.html').replace('<link rel="stylesheet" href="style.css?v=6">',`<!-- Pretendard font license\n${read('fonts/LICENSE.txt')}\n--><style>${css}</style>`).replace('<script type="module" src="app.js?v=6"></script>',`<script type="module">${app.replaceAll('</script','<\\/script')}</script>`);
 fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'COMPASS.html'),html);
 console.log(JSON.stringify({html:path.join(out,'COMPASS.html'),bytes:Buffer.byteLength(html)}));
