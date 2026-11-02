@@ -1,6 +1,6 @@
-import {setupFeatureVideos} from './feature-videos.js?v=8';
-import {setupPlanningPlayer} from './planning-player.js?v=8';
-import {setupRevisionMotion} from './revision-motion.js?v=8';
+import {setupFeatureVideos} from './feature-videos.js?v=9';
+import {setupPlanningPlayer} from './planning-player.js?v=9';
+import {setupRevisionMotion} from './revision-motion.js?v=9';
 const NS='http://www.w3.org/2000/svg';
 let assetSerial=0;
 const art=document.querySelector('#art');
@@ -20,6 +20,7 @@ function animate(e,frames,options){return e.animate(frames,{...options,duration:
 function watch(y,height,enter,leave=()=>{}){let inside=false;return ()=>{const top=scrollY/scale,bottom=(scrollY+innerHeight)/scale;const next=bottom>y+Math.min(height*.15,150)&&top<y+height;if(next&&!inside)enter();if(!next&&inside)leave();inside=next}}
 let scale=1;const watchers=[];
 function resize(){scale=Math.max(1024,document.documentElement.clientWidth)/1920;document.documentElement.style.setProperty('--scale',scale);update()}
+setupPlanningPlayer({node,make,watch,watchers});
 // Fixed navigation uses the original outlined lettering and original coordinates.
 const nav=document.querySelector('#gnb'),navSvg=make('svg',{viewBox:'677.387 28.387 564.226 53.4041',fill:'none','aria-hidden':'true'});
 for(const i of range(742,748))navSvg.append(node(i));nav.append(navSvg);
@@ -64,11 +65,11 @@ const weekImage=weekArtwork.querySelector('image'),weekImageUrl=weekImage.getAtt
 // phone geometry inside the SVG to the original phone, preserving all padding.
 const mockups=[];
 for(const [i,phoneId,captionId]of [[1,651,592],[2,652,596],[3,650,599]]){const original=node(phoneId),box=original.getBBox(),asset=await importSvg('목업'+i),reveal=make('g',{class:'mockup-reveal week-hidden','data-mockup':i,'aria-label':'마음 탐험 일지 목업 '+i,'aria-hidden':'true'}),hover=make('g',{class:'week-mockup-hover',tabindex:0,role:'img'});original.before(reveal);reveal.append(hover);hover.append(asset);const phone=Array.from(asset.children).find(e=>e.tagName==='g'),local=phone.getBBox();asset.setAttribute('x',box.x-local.x);asset.setAttribute('y',box.y-local.y);original.remove();node(captionId).remove();mockups.push(reveal)}
-const weekHint=await importSvg('week3 어포던스'),weekHintMotion=make('g',{'data-part':'week3-hint','pointer-events':'none'});weekHint.setAttribute('x',weekBox.x+18);weekHint.setAttribute('y',weekBox.y+weekBox.h+25);weekHintMotion.append(weekHint);week.after(weekHintMotion);if(!reduced)animate(weekHintMotion,[{transform:'translateY(0)'},{transform:'translateY(-6px)'},{transform:'translateY(0)'}],{duration:2100,iterations:Infinity,easing:'ease-in-out'});
+const weekHint=await importSvg('week3 어포던스'),weekHintMotion=make('g',{'data-part':'week3-hint','pointer-events':'none'});weekHint.setAttribute('x',weekBox.x+18);weekHint.setAttribute('y',weekBox.y+weekBox.h+45);weekHintMotion.append(weekHint);week.after(weekHintMotion);if(!reduced)animate(weekHintMotion,[{transform:'translateY(0)'},{transform:'translateY(-6px)'},{transform:'translateY(0)'}],{duration:2100,iterations:Infinity,easing:'ease-in-out'});
 let weekOpen=false,weekGeneration=0;
 action(week,'Week 3 마음 탐험 일지 열기',()=>{weekOpen=!weekOpen;weekHintMotion.style.opacity=weekOpen?'0':'1';if(weekOpen&&scrollY/scale>35138&&scrollY/scale<36300)window.scrollTo({top:35138*scale,behavior:reduced?'instant':'smooth'});week.setAttribute('aria-expanded',String(weekOpen));const generation=++weekGeneration;mockups.forEach((g,i)=>{const hidden=g.classList.contains('week-hidden'),computed=getComputedStyle(g),from={opacity:hidden?0:computed.opacity,transform:hidden?'translateX(-42px)':computed.transform};g.getAnimations().forEach(a=>a.cancel());g.classList.remove('week-hidden');g.setAttribute('aria-hidden',String(!weekOpen));g.style.pointerEvents=weekOpen?'':'none';const opening=weekOpen;animate(g,[from,{opacity:opening?1:0,transform:opening?'translateX(0)':'translateX(-42px)'}],{duration:opening?430:330,delay:reduced?0:opening?i*105:(2-i)*65,easing:'cubic-bezier(.22,1,.36,1)',fill:'both'}).finished.then(()=>{if(generation!==weekGeneration)return;g.style.opacity=opening?'1':'0';if(!opening)g.classList.add('week-hidden')}).catch(()=>{})})});hit(week,weekBox.x,weekBox.y,weekBox.w,weekBox.h);week.setAttribute('aria-expanded','false');
 // Record hover images are in the same original slots; no base geometry changes.
-async function importSvg(name){let s=await fetch('assets/'+name+'.svg?v=8').then(r=>{if(!r.ok)throw Error('SVG unavailable: '+name);return r.text()});s=s.replaceAll('../images/','images/');const doc=new DOMParser().parseFromString(s,'image/svg+xml'),root=doc.documentElement,prefix='asset-'+(++assetSerial)+'-';const ids=Array.from(root.querySelectorAll('[id]')).map(e=>e.id);for(const id of ids)s=s.replaceAll(id,prefix+id);return new DOMParser().parseFromString(s,'image/svg+xml').documentElement}
+async function importSvg(name){let s=await fetch('assets/'+name+'.svg?v=9').then(r=>{if(!r.ok)throw Error('SVG unavailable: '+name);return r.text()});s=s.replaceAll('../images/','images/');const doc=new DOMParser().parseFromString(s,'image/svg+xml'),root=doc.documentElement,prefix='asset-'+(++assetSerial)+'-';const ids=Array.from(root.querySelectorAll('[id]')).map(e=>e.id);for(const id of ids)s=s.replaceAll(id,prefix+id);return new DOMParser().parseFromString(s,'image/svg+xml').documentElement}
 // The supplied Design blocks preserve their original anchor and native size.
 for(const [name,ids,anchor]of [
  ['디자인 글씨',[309,310],309],
@@ -98,7 +99,6 @@ const featureIntro=await importSvg('웹 기능쪽 목업'),featureAnchor=node(51
 const onboarding=await importSvg('온보딩 수정'),onboardingBox=node(260).getBBox(),onboardingPath=onboarding.firstElementChild;node(260).before(onboarding);const onboardingLocal=onboardingPath.getBBox();onboarding.setAttribute('x',onboardingBox.x+onboardingBox.width/2-onboardingLocal.x-onboardingLocal.width/2);onboarding.setAttribute('y',onboardingBox.y-onboardingLocal.y);onboarding.setAttribute('data-part','onboarding-label');[260,261,262].forEach(i=>node(i).remove());
 // The strip's original crop moves into the surrounding panel's left/right edge.
 node(643).setAttribute('transform','translate(8,0)');node(643).setAttribute('data-part','compass-card-strip');
-setupPlanningPlayer({node,make,watch,watchers});
 await setupRevisionMotion({svg,scene,node,make,group,range,importSvg,animate,watch,watchers,reduced});
 await setupFeatureVideos({svg,node,make,watch,watchers,myPage,onExploreStart:resetExplore,onExploreEnd:revealExplore,onExploreLeave:resetExplore});
 // Fixed TOP control uses the original circle and lettering on every section.
