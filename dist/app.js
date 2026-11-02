@@ -1,6 +1,6 @@
-import {setupFeatureVideos} from './feature-videos.js?v=9';
-import {setupPlanningPlayer} from './planning-player.js?v=9';
-import {setupRevisionMotion} from './revision-motion.js?v=9';
+import {setupFeatureVideos} from './feature-videos.js?v=10';
+import {setupPlanningPlayer} from './planning-player.js?v=10';
+import {setupRevisionMotion} from './revision-motion.js?v=10';
 const NS='http://www.w3.org/2000/svg';
 let assetSerial=0;
 const art=document.querySelector('#art');
@@ -69,7 +69,7 @@ const weekHint=await importSvg('week3 어포던스'),weekHintMotion=make('g',{'d
 let weekOpen=false,weekGeneration=0;
 action(week,'Week 3 마음 탐험 일지 열기',()=>{weekOpen=!weekOpen;weekHintMotion.style.opacity=weekOpen?'0':'1';if(weekOpen&&scrollY/scale>35138&&scrollY/scale<36300)window.scrollTo({top:35138*scale,behavior:reduced?'instant':'smooth'});week.setAttribute('aria-expanded',String(weekOpen));const generation=++weekGeneration;mockups.forEach((g,i)=>{const hidden=g.classList.contains('week-hidden'),computed=getComputedStyle(g),from={opacity:hidden?0:computed.opacity,transform:hidden?'translateX(-42px)':computed.transform};g.getAnimations().forEach(a=>a.cancel());g.classList.remove('week-hidden');g.setAttribute('aria-hidden',String(!weekOpen));g.style.pointerEvents=weekOpen?'':'none';const opening=weekOpen;animate(g,[from,{opacity:opening?1:0,transform:opening?'translateX(0)':'translateX(-42px)'}],{duration:opening?430:330,delay:reduced?0:opening?i*105:(2-i)*65,easing:'cubic-bezier(.22,1,.36,1)',fill:'both'}).finished.then(()=>{if(generation!==weekGeneration)return;g.style.opacity=opening?'1':'0';if(!opening)g.classList.add('week-hidden')}).catch(()=>{})})});hit(week,weekBox.x,weekBox.y,weekBox.w,weekBox.h);week.setAttribute('aria-expanded','false');
 // Record hover images are in the same original slots; no base geometry changes.
-async function importSvg(name){let s=await fetch('assets/'+name+'.svg?v=9').then(r=>{if(!r.ok)throw Error('SVG unavailable: '+name);return r.text()});s=s.replaceAll('../images/','images/');const doc=new DOMParser().parseFromString(s,'image/svg+xml'),root=doc.documentElement,prefix='asset-'+(++assetSerial)+'-';const ids=Array.from(root.querySelectorAll('[id]')).map(e=>e.id);for(const id of ids)s=s.replaceAll(id,prefix+id);return new DOMParser().parseFromString(s,'image/svg+xml').documentElement}
+async function importSvg(name){let s=await fetch('assets/'+name+'.svg?v=10').then(r=>{if(!r.ok)throw Error('SVG unavailable: '+name);return r.text()});s=s.replaceAll('../images/','images/');const doc=new DOMParser().parseFromString(s,'image/svg+xml'),root=doc.documentElement,prefix='asset-'+(++assetSerial)+'-';const ids=Array.from(root.querySelectorAll('[id]')).map(e=>e.id);for(const id of ids)s=s.replaceAll(id,prefix+id);return new DOMParser().parseFromString(s,'image/svg+xml').documentElement}
 // The supplied Design blocks preserve their original anchor and native size.
 for(const [name,ids,anchor]of [
  ['디자인 글씨',[309,310],309],
