@@ -14,3 +14,5 @@
 
 .week-mockup-hover{transform-box:fill-box;transform-origin:center;transition:transform .3s cubic-bezier(.22,1,.36,1);outline:none}.week-mockup-hover:hover,.week-mockup-hover:focus-visible{transform:scale(1.025)}.mockup-reveal{transition:none}
 .solution-card{outline:none}
+
+.planning-player.autoplay-blocked .film-start{display:block}.planning-player video{visibility:visible}[data-part="week3-hint"]{transition:opacity .25s ease}
