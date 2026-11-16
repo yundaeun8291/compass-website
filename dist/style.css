@@ -16,3 +16,8 @@
 .solution-card{outline:none}
 
 .planning-player video{visibility:visible}[data-part="week3-hint"]{transition:opacity .25s ease}
+
+.capstone-expression{transform-box:fill-box;transform-origin:center;transition:transform .32s cubic-bezier(.22,1,.36,1)}
+.capstone-expression:hover,.capstone-expression:focus-visible{transform:scale(1.045)}
+.capstone-wordmark-video{display:block;width:100%;height:100%;object-fit:cover;object-position:center;filter:contrast(1.16) brightness(1.13)}
+.onboarding-caption{fill:#25282b;font:600 22px Pretendard,sans-serif}
