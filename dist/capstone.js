@@ -67,6 +67,14 @@ export async function mountCapstone({svg, legacy, player, make, watch, watchers,
     reveal(g,b.y,b.height,options);
     return g;
   }
+  async function replaceArtwork(name,ids,x,y) {
+    const asset=await importSvg('capstone-'+name);
+    asset.setAttribute('x',x);
+    asset.setAttribute('y',y);
+    part(ids[0]).before(asset);
+    ids.forEach(id=>part(id).remove());
+    return asset;
+  }
   function sequence(items,y,height) {
     if (reduced) return;
     let running=[];
@@ -226,7 +234,9 @@ export async function mountCapstone({svg, legacy, player, make, watch, watchers,
     character.setAttribute('tabindex','0');
   }
   rise([138,139],'design-guide');
-  rise(range(811,821),'design-keywords');
+  const keywords=await replaceArtwork('design-guide',range(811,821),121,19201);
+  const keywordMotion=groupElements([keywords],{'data-capstone':'design-keywords'});
+  reveal(keywordMotion,19205.3,179.7);
   rise([682,696],'logo-heading');
   rise(range(683,695),'wordmark');
   const staticMark=group(range(684,694));
@@ -257,10 +267,21 @@ export async function mountCapstone({svg, legacy, player, make, watch, watchers,
   },()=>swap?.cancel());
   if (reduced) after.style.opacity='1';
 
-  rise([158,311],'iconography-heading');
-  rise([159,...range(164,310)],'iconography-grid');
-  rise(range(160,163),'iconography-preview');
-  setupIconPreview({part,make,group,visibility,reduced,move,action,hit});
+  const iconographyY=21375;
+  const iconography=await replaceArtwork('iconography',range(158,311),0,iconographyY);
+  iconography.style.overflow='visible';
+  const iconParts=[...iconography.children];
+  const iconGroup=(indices,attributes)=>groupElements(indices.map(i=>iconParts[i]),attributes);
+  for (const [indices,name] of [
+    [[152,153],'iconography-heading'],
+    [range(4,151),'iconography-grid'],
+    [range(0,3),'iconography-preview']
+  ]) {
+    const layer=iconGroup(indices,{'data-capstone':name});
+    const box=layer.getBBox();
+    reveal(layer,iconographyY+box.y,box.height);
+  }
+  setupIconPreview({part:i=>iconParts[i],make,group:iconGroup,visibility,reduced,move,action,hit});
   rise(range(144,157),'typography');
   rise(range(822,847),'colors');
 
@@ -275,6 +296,9 @@ export async function mountCapstone({svg, legacy, player, make, watch, watchers,
   rise(range(520,523),'features-heading');
   rise(range(524,526),'features-mockups',{delay:120});
   reveal(part(376),26363,1432,{delay:120});
+  const onboarding=await replaceArtwork('onboarding',[123,124,125,...range(385,411)],0,28202);
+  const onboardingMotion=groupElements([onboarding],{'data-capstone':'onboarding'});
+  reveal(onboardingMotion,28202,1137,{distance:36});
   await mountFeatures({part,group,make,visibility,clip,action,hit,importSvg,reduced});
 }
 
@@ -288,19 +312,19 @@ function setupIconPreview({part,make,group,visibility,reduced,move,action,hit}) 
     [[73,75],[76,77],[78,84],[85,92],[93,99],[100,106],[107],[108],[109,111],[112,114]],
     [[115,120],[121,126],[127,128],[129,133],[134,137],[138,142],[143,144],[145],[146,147]]
   ];
-  const firstIcon=part(164);
+  const firstIcon=part(5);
   const marker=make('circle',{r:33.5,fill:'#CAFFC9','fill-opacity':.24,'pointer-events':'none','data-capstone':'icon-highlight'});
   firstIcon.before(marker);
   const icons=rows.flatMap(row=>row.map(([start,end=start])=>{
-    const index=163+start;
-    const icon=group(range(index,163+end),{id:'capstone-system-icon-'+start});
+    const index=4+start;
+    const icon=group(range(index,4+end),{id:'capstone-system-icon-'+start});
     const box=icon.getBBox();
     return {icon,x:box.x+box.width/2,y:box.y+box.height/2,width:box.width,height:box.height};
   }));
-  const previewBox=part(163).getBBox();
+  const previewBox=part(3).getBBox();
   const centerX=previewBox.x+previewBox.width/2,centerY=previewBox.y+previewBox.height/2;
   const stage=make('g',{'data-capstone':'icon-stage','aria-hidden':'true'});
-  part(163).replaceWith(stage);
+  part(3).replaceWith(stage);
   let current=0,shown,timer,outgoing,visible=false;
   function show(index,transition) {
     stage.dataset.icon=String(index+1);

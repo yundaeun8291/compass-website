@@ -6,50 +6,6 @@ export async function mountFeatures({part,group,make,visibility,clip,action,hit,
     return element.animate(frames,{duration:reduced?1:duration,easing:ease,fill:'both',...options});
   }
 
-  // Replace only the center display. The side previews and center casing stay in place.
-  const original=part(403);
-  const display=make('g',{'data-onboarding-screen':'1','clip-path':clip('onboarding-display',{x:772.8,y:28560.1,width:374.4,height:811.8,rx:47})});
-  original.before(display);
-  const previews=[386,387,403,410,411].map(id=>{
-    if(id===403) return original;
-    const screen=part(id).cloneNode(true);
-    screen.removeAttribute('opacity');
-    screen.removeAttribute('stroke');
-    screen.querySelectorAll('[stroke]').forEach(element=>element.remove());
-    const x=Number(part(id).getAttribute('x')??122.5);
-    const slot=make('g',{transform:'translate(772.8 28560.1) scale('+374.4/283+' '+811.8/617+') translate('+(-x)+' -28657.5)'});
-    slot.append(screen);
-    return slot;
-  });
-  display.append(...previews);
-  const caption=part(385);
-  const alternate=make('text',{x:960,y:29459,'text-anchor':'middle','dominant-baseline':'central',class:'onboarding-caption'});
-  caption.after(alternate);
-  const onboardingButton=make('g');
-  part(409).after(onboardingButton);
-  hit(onboardingButton,749,28539,422,854);
-  let step=0,onboardingTimer;
-  const present=()=>{
-    previews.forEach((screen,i)=>screen.style.display=i===step?'':'none');
-    caption.style.display=step===2?'':'none';
-    alternate.textContent=({1:'현재 관심 분야',3:'목표 실천 현황'})[step]??'';
-    display.dataset.onboardingScreen=String(step+1);
-    onboardingButton.setAttribute('aria-label','온보딩 '+(step+1)+'/5. 다음 화면');
-  };
-  const next=()=>{
-    clearTimeout(onboardingTimer);
-    step=(step+1)%previews.length;
-    present();
-    if (!reduced) onboardingTimer=setTimeout(next,3000);
-  };
-  action(onboardingButton,'온보딩 다음 화면',next);
-  present();
-  visibility(28540,852,()=>{
-    step=0;
-    present();
-    if (!reduced) onboardingTimer=setTimeout(next,3000);
-  },()=>clearTimeout(onboardingTimer));
-
   function phone(name,anchor,box) {
     const {x,y,width,height,rx=42}=box;
     const frame=make('foreignObject',{x,y,width,height,'data-feature-video':name,
