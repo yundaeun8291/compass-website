@@ -1,4 +1,4 @@
-import {mountCapstone, legacyOffset, sectionStarts} from './capstone.js?v=15';
+import {mountCapstone, legacyOffset, sectionStarts} from './capstone.js?v=16';
 import {setupPlanningPlayer} from './planning-player.js?v=10';
 import {setupRevisionMotion} from './revision-motion.js?v=10';
 const NS='http://www.w3.org/2000/svg';

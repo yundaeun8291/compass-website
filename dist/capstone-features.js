@@ -32,8 +32,8 @@ export async function mountFeatures({part,group,make,visibility,action,hit,impor
     }
     const frame=make('foreignObject',{width:videoWidth,height:videoHeight,'data-feature-video':name,
       'clip-path':'url(#'+mask.id+')',class:'phone-video'});
-    const buttons=make('g',{fill:'#b7bbc1',stroke:'#8a9098','stroke-width':1.5});
-    for (const [x,y,w,h] of [[left+4,top+255,6,48],[left+5,top+349,6,98],[left+5,top+475,6,98],[left+bodyWidth-11,top+382,6,155]]) {
+    const buttons=make('g',{fill:'#bcc0c6',stroke:'#757b83','stroke-width':1.8});
+    for (const [x,y,w,h] of [[left-2,top+255,12,48],[left-2,top+349,12,98],[left-2,top+475,12,98],[left+bodyWidth-10,top+382,12,155]]) {
       buttons.append(make('rect',{x,y,width:w,height:h,rx:3}));
     }
     holder.append(mask,silver,buttons,frame,
@@ -233,7 +233,7 @@ export async function mountFeatures({part,group,make,visibility,action,hit,impor
 
 function media(name,extension) {
   const source='capstone/media/'+name+'.'+extension;
-  return source.startsWith('data:')?source:source+'?v=14';
+  return source.startsWith('data:')?source:source+'?v=16';
 }
 function record(side) {
   const source='capstone/record-'+side+'.svg';
