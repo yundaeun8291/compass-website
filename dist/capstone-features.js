@@ -24,20 +24,15 @@ export async function mountFeatures({part,group,make,visibility,action,hit,impor
     const offsetY=y+(height-bodyHeight*scale)/2;
     const holder=make('g',{transform:'translate('+offsetX+' '+offsetY+') scale('+scale+') translate('+(-left)+' '+(-top)+')'});
     const mask=make('clipPath',{id:'recorded-phone-'+name,clipPathUnits:'userSpaceOnUse'});
-    const rim={x:left+9,y:top+4,width:bodyWidth-18,height:bodyHeight-8,rx:102};
-    mask.append(make('rect',rim));
-    const silver=make('linearGradient',{id:'recorded-rim-'+name,x1:0,y1:0,x2:1,y2:1});
-    for (const [offset,color] of [[0,'#eef0f3'],[.32,'#b5bac1'],[.57,'#e1e4e8'],[1,'#a6abb2']]) {
-      silver.append(make('stop',{offset,'stop-color':color}));
-    }
+    // The foreground shows the original recording at its existing scale.
+    mask.append(make('rect',{
+      x:left+36,y:top+29,width:bodyWidth-71,height:bodyHeight-57,rx:82
+    }));
+    const shell=make('image',{href:'capstone/phone-shell.svg',x:left,y:top,
+      width:bodyWidth,height:bodyHeight,preserveAspectRatio:'none','pointer-events':'none'});
     const frame=make('foreignObject',{width:videoWidth,height:videoHeight,'data-feature-video':name,
       'clip-path':'url(#'+mask.id+')',class:'phone-video'});
-    const buttons=make('g',{fill:'#bcc0c6',stroke:'#757b83','stroke-width':1.8});
-    for (const [x,y,w,h] of [[left-2,top+255,12,48],[left-2,top+349,12,98],[left-2,top+475,12,98],[left+bodyWidth-10,top+382,12,155]]) {
-      buttons.append(make('rect',{x,y,width:w,height:h,rx:3}));
-    }
-    holder.append(mask,silver,buttons,frame,
-      make('rect',{...rim,fill:'none',stroke:'url(#'+silver.id+')','stroke-width':10,'pointer-events':'none'}));
+    holder.append(mask,shell,frame);
     const container=document.createElement('div');
     container.className='phone-video-clip';
     const video=document.createElement('video');
