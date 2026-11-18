@@ -1,4 +1,4 @@
-import {mountFeatures} from './capstone-features.js?v=13';
+import {mountFeatures} from './capstone-features.js?v=14';
 export const legacyOffset = 4195;
 const detailStart = 45151;
 export const sectionStarts = [2212, 11918, 18598, 25925];
@@ -299,7 +299,7 @@ export async function mountCapstone({svg, legacy, player, make, watch, watchers,
   const onboarding=await replaceArtwork('onboarding',[123,124,125,...range(385,411)],0,28202);
   const onboardingMotion=groupElements([onboarding],{'data-capstone':'onboarding'});
   reveal(onboardingMotion,28202,1137,{distance:36});
-  await mountFeatures({part,group,make,visibility,clip,action,hit,importSvg,reduced});
+  await mountFeatures({part,group,make,visibility,action,hit,importSvg,reduced});
 }
 
 function setupIconPreview({part,make,group,visibility,reduced,move,action,hit}) {
