@@ -28,23 +28,22 @@ export async function mountFeatures({part,group,make,visibility,clip,action,hit,
     frame.append(container);
     part(anchor).after(frame);
     // Keep the hardware and status row stationary over both the poster and video.
-    const status=make('g',{'clip-path':screenClip,'pointer-events':'none','aria-hidden':'true','data-phone-status':name});
-    const row=make('g',{transform:'translate('+x+' '+y+')',fill:'#1d1d1b'});
+    const status=make('g',{'pointer-events':'none','aria-hidden':'true','data-phone-status':name});
+    const row=make('g',{transform:'translate('+x+' '+y+')',fill:'white',style:'mix-blend-mode:difference'});
     const clock=make('text',{x:45,y:30,'font-family':'Arial, sans-serif','font-size':16,'font-weight':700});
     clock.textContent='9:41';
     const icons=make('g',{transform:'translate('+(width-90)+' 19)'});
     [4,7,10,13].forEach((barHeight,i)=>icons.append(make('rect',{x:i*4,y:13-barHeight,width:3,height:barHeight,rx:1})));
     icons.append(
-      make('path',{d:'M20 4 Q28 -2 36 4 M23 7 Q28 3 33 7 M26 10 Q28 8 30 10',fill:'none',stroke:'#1d1d1b','stroke-width':2,'stroke-linecap':'round'}),
+      make('path',{d:'M20 4 Q28 -2 36 4 M23 7 Q28 3 33 7 M26 10 Q28 8 30 10',fill:'none',stroke:'white','stroke-width':2,'stroke-linecap':'round'}),
       make('circle',{cx:28,cy:13,r:1}),
-      make('rect',{x:42,y:2,width:21,height:11,rx:2.5,fill:'none',stroke:'#1d1d1b'}),
+      make('rect',{x:42,y:2,width:21,height:11,rx:2.5,fill:'none',stroke:'white'}),
       make('rect',{x:44,y:4,width:17,height:7,rx:1}),
       make('rect',{x:64,y:5,width:2,height:5,rx:1})
     );
     const pill=make('g',{transform:'translate('+(x+width/2-958.1)+' '+(y-32509.1)+')'});
     pill.append(...range(970,975).map(id=>part(id).cloneNode(true)));
-    const statusFill=name==='map'?'#caffed':name==='pocket'?'#e3f2ec':'#f9f9f9';
-    row.append(make('rect',{width,height:52,fill:statusFill}),clock,icons);
+    row.append(clock,icons);
     status.append(row,pill);
     frame.after(status);
     return {video,reset(){
@@ -197,8 +196,13 @@ export async function mountFeatures({part,group,make,visibility,clip,action,hit,
     const {x,y,width,height}=part(first).getBBox();
     front.before(card);
     card.append(hover);
-    hover.append(front);
-    if(back) hover.append(make('image',{class:'record-back',href:record(back),x,y,width,height}));
+    if(back) {
+      hover.append(
+        make('image',{class:'record-front',href:record(back+'-front'),x,y,width,height}),
+        make('image',{class:'record-back',href:record(back),x,y,width,height})
+      );
+      front.remove();
+    } else hover.append(front);
     hit(card,x,y,width,height);
   }
 
@@ -220,6 +224,9 @@ export async function mountFeatures({part,group,make,visibility,clip,action,hit,
 
 function media(name,extension) {
   const source='capstone/media/'+name+'.'+extension;
-  return source.startsWith('data:')?source:source+'?v=11';
+  return source.startsWith('data:')?source:source+'?v=12';
 }
-const record=side=>'capstone/record-'+side+'.svg';
+function record(side) {
+  const source='capstone/record-'+side+'.svg';
+  return source.startsWith('data:')?source:source+'?v=12';
+}

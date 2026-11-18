@@ -12,7 +12,7 @@ const footage=Object.fromEntries(fs.readdirSync(path.join(root,'capstone/media')
 const featureSource=read('capstone-features.js').replace(/^export /gm,'')
   .replace("'capstone/media/'+name+'.'+extension","footage[name+'.'+extension]")
   .replace("'capstone/record-'+side+'.svg'","recordArt[side]");
-const featureAssets='const footage='+JSON.stringify(footage)+';\nconst recordArt='+JSON.stringify({left:data('capstone/record-left.svg'),right:data('capstone/record-right.svg')})+';\n';
+const featureAssets='const footage='+JSON.stringify(footage)+';\nconst recordArt='+JSON.stringify(Object.fromEntries(['left','right','left-front','right-front'].map(side=>[side,data('capstone/record-'+side+'.svg')])))+';\n';
 const capstoneSource=read('capstone.js').replace(/^import .*?;\n/m,'').replace(/^export /gm,'')
   .replace(/await fetch\('capstone\/solution\.svg'\)\.then\(response=>\{[\s\S]*?\n  \}\)/,()=>JSON.stringify(read('capstone/solution.svg')))
   .replace("await fetch('capstone/art.svg').then(response => {\n    if (!response.ok) throw Error('Capstone artwork unavailable');\n    return response.text();\n  })",'embeddedCapstoneArt')
@@ -22,6 +22,6 @@ let app=read('app.js').replace(/import \{mountCapstone, legacyOffset, sectionSta
 app=`const embeddedAssets=${JSON.stringify(assets)};\n`+app;
 app=app.replace(/let s=await fetch\('assets\/'.*?;return r.text\(\)\}\);/,"let s=embeddedAssets[name];");
 const css=read('style.css').replace('fonts/Pretendard-SemiBold.woff2',data('fonts/Pretendard-SemiBold.woff2'));
-let html=read('index.html').replace(/<script src="intro-preload\.js\?v=10"><\/script>/,'').replace(/<video id="intro-preload"[^>]*><\/video>/,'').replace('<link rel="stylesheet" href="style.css?v=10">',`<!-- Pretendard font license\n${read('fonts/LICENSE.txt')}\n--><style>${css}</style>`).replace('<script type="module" src="app.js?v=11"></script>',`<script type="module">${app.replaceAll('</script','<\\/script')}</script>`);
+let html=read('index.html').replace(/<script src="intro-preload\.js\?v=10"><\/script>/,'').replace(/<video id="intro-preload"[^>]*><\/video>/,'').replace('<link rel="stylesheet" href="style.css?v=10">',`<!-- Pretendard font license\n${read('fonts/LICENSE.txt')}\n--><style>${css}</style>`).replace('<script type="module" src="app.js?v=12"></script>',`<script type="module">${app.replaceAll('</script','<\\/script')}</script>`);
 fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'COMPASS-capstone.html'),html);
 console.log(JSON.stringify({html:path.join(out,'COMPASS-capstone.html'),bytes:Buffer.byteLength(html)}));
