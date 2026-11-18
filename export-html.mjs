@@ -22,6 +22,6 @@ let app=read('app.js').replace(/import \{mountCapstone, legacyOffset, sectionSta
 app=`const embeddedAssets=${JSON.stringify(assets)};\n`+app;
 app=app.replace(/let s=await fetch\('assets\/'.*?;return r.text\(\)\}\);/,"let s=embeddedAssets[name];");
 const css=read('style.css').replace('fonts/Pretendard-SemiBold.woff2',data('fonts/Pretendard-SemiBold.woff2'));
-let html=read('index.html').replace(/<script src="intro-preload\.js\?v=10"><\/script>/,'').replace(/<video id="intro-preload"[^>]*><\/video>/,'').replace('<link rel="stylesheet" href="style.css?v=10">',`<!-- Pretendard font license\n${read('fonts/LICENSE.txt')}\n--><style>${css}</style>`).replace('<script type="module" src="app.js?v=10"></script>',`<script type="module">${app.replaceAll('</script','<\\/script')}</script>`);
+let html=read('index.html').replace(/<script src="intro-preload\.js\?v=10"><\/script>/,'').replace(/<video id="intro-preload"[^>]*><\/video>/,'').replace('<link rel="stylesheet" href="style.css?v=10">',`<!-- Pretendard font license\n${read('fonts/LICENSE.txt')}\n--><style>${css}</style>`).replace('<script type="module" src="app.js?v=11"></script>',`<script type="module">${app.replaceAll('</script','<\\/script')}</script>`);
 fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'COMPASS-capstone.html'),html);
 console.log(JSON.stringify({html:path.join(out,'COMPASS-capstone.html'),bytes:Buffer.byteLength(html)}));
