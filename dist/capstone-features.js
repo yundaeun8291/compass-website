@@ -1,5 +1,6 @@
 const range=(start,end)=>Array.from({length:end-start+1},(_,i)=>start+i);
 const ease='cubic-bezier(.22,1,.36,1)';
+const alignedStatus=new Set(['emotion','home','mission','profile','camp']);
 
 export async function mountFeatures({part,group,make,visibility,clip,action,hit,importSvg,reduced}) {
   function animate(element,frames,duration,options={}) {
@@ -16,6 +17,15 @@ export async function mountFeatures({part,group,make,visibility,clip,action,hit,
     const poster=document.createElement('img');
     poster.className='phone-poster';
     poster.alt='';
+    if (alignedStatus.has(name)) {
+      // Fit the status row inside the mockup and trim the recorded top bezel.
+      video.style.transform='none';
+      for (const media of [video,poster]) {
+        media.style.objectFit='fill';
+        media.style.top='-.7%';
+        media.style.height='100.7%';
+      }
+    }
     video.muted=true;
     video.playsInline=true;
     video.preload='auto';
@@ -25,6 +35,12 @@ export async function mountFeatures({part,group,make,visibility,clip,action,hit,
     container.append(video,poster);
     frame.append(container);
     part(anchor).after(frame);
+    if (alignedStatus.has(name) && name!=='emotion') {
+      // Reuse the same hardware drawing as the static emotion mockup.
+      const pill=make('g',{transform:'translate('+(x+width/2-960)+' '+(y-32509.1)+')','pointer-events':'none','aria-hidden':'true'});
+      pill.append(...range(970,975).map(id=>part(id).cloneNode(true)));
+      frame.after(pill);
+    }
     return {video,reset(){
       video.pause();
       video.currentTime=0;
