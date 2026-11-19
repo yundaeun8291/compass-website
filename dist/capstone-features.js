@@ -44,7 +44,7 @@ export async function mountFeatures({part,group,make,visibility,action,hit,impor
     poster.style.objectFit='contain';
     video.muted=true;
     video.playsInline=true;
-    video.preload='auto';
+    video.preload='none';
     video.src=media(name,'mp4');
     poster.src=media(name,'jpg');
     video.addEventListener('playing',()=>{poster.hidden=true});
