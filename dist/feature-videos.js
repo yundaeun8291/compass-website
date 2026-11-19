@@ -6,7 +6,7 @@ export async function setupFeatureVideos({svg,node,make,watch,watchers,myPage,on
 
   const object=make('foreignObject',{x:box.x,y:box.y,width:box.w,height:box.h,'data-video':key,'data-state':'waiting','aria-hidden':'true',class:'phone-video'});
   const wrap=document.createElement('div');wrap.className='phone-video-clip';wrap.style.borderRadius=box.r+'px';
-  const video=document.createElement('video');video.src=sources[key].src;video.playbackRate=sources[key].playbackRate||1;video.defaultPlaybackRate=video.playbackRate;video.muted=true;video.defaultMuted=true;video.setAttribute('muted','');video.playsInline=true;video.setAttribute('playsinline','');video.preload='auto';video.controls=false;video.loop=false;video.disablePictureInPicture=true;video.style.visibility='hidden';
+  const video=document.createElement('video');video.src=sources[key].src;video.playbackRate=sources[key].playbackRate||1;video.defaultPlaybackRate=video.playbackRate;video.muted=true;video.defaultMuted=true;video.setAttribute('muted','');video.playsInline=true;video.setAttribute('playsinline','');video.preload='metadata';video.controls=false;video.loop=false;video.disablePictureInPicture=true;video.style.visibility='hidden';
   const layer=make('g',{'pointer-events':'none'});wrap.append(video);object.append(wrap);layer.append(object);anchor.after(layer);
   if(sources[key].poster){const poster=document.createElement('img');poster.className='phone-poster';poster.src=sources[key].poster;poster.alt='';wrap.prepend(poster)}
   if(frame){const b=box.outer;layer.append(make('image',{href:frame,x:b.x,y:b.y,width:b.width,height:b.height}))}
