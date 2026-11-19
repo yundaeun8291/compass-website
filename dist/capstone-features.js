@@ -228,7 +228,7 @@ export async function mountFeatures({part,group,make,visibility,action,hit,impor
 
 function media(name,extension) {
   const source='capstone/media/'+name+'.'+extension;
-  return source.startsWith('data:')?source:source+'?v=18';
+  return source.startsWith('data:')?source:source+'?v=19';
 }
 function record(side) {
   const source='capstone/record-'+side+'.svg';
