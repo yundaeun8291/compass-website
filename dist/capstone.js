@@ -1,4 +1,4 @@
-import {mountFeatures} from './capstone-features.js?v=17';
+import {mountFeatures} from './capstone-features.js?v=18';
 export const legacyOffset = 4195;
 const detailStart = 45151;
 export const sectionStarts = [2212, 11918, 18598, 25925];
